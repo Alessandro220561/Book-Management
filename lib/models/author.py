@@ -67,3 +67,11 @@ class Author:
         """
         CURSOR.execute(sql, (self.name, self.id))
         CONN.commit()
+
+    def delete(self):
+        sql = """
+            DELETE FROM authors
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id),)
+        CONN.commit()
