@@ -56,3 +56,18 @@ class Book:
             raise ValueError(
                 "Book rating must be an integer"
             )
+
+    @property
+    def published_date(self):
+        return self._published_date
+
+    @published_date.setter
+    def published_date(self, date_str):
+        date_format = "%m/%d/%Y"
+        try:
+            parsed_date = datetime.datetime.strptime(date_str, date_format)
+        except ValueError:
+            raise ValueError(
+                "Invalid date format, please use mm/dd/yyy format"
+            )
+        self._published_date = parsed_date.strftime(date_format)
