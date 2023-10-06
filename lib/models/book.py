@@ -7,12 +7,13 @@ class Book:
 
     all_books = {}
 
-    def __init__(self, title, author_id, total_pages, rating, published_date):
+    def __init__(self, title, author_id, total_pages, rating, published_date, id=None):
         self.title = title
         self.author_id = author_id
         self.total_pages = total_pages
         self.rating = rating
         self.published_date = published_date
+        self.id = id
 
     def __repr__(self):
         return (
@@ -80,6 +81,7 @@ class Book:
             CREATE TABLE IF NOT EXISTS books
             (
             id INTEGER PRIMARY KEY,
+            title TEXT,
             author_id INT,
             FOREIGN KEY (author_id) REFERENCES authors(id),
             total_pages INT,
@@ -101,10 +103,27 @@ class Book:
     def save(self):
         sql = """
             INSERT INTO books
-            (author_id, total_pages, rating, published_date)
+            (title, author_id, total_pages, rating, published_date)
             VALUES
-            (?, ?, ?, ?)
+            (?, ?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.author_id), (self.total_pages),
+        CURSOR.execute(sql, (self.title), (self.author_id), (self.total_pages),
                        (self.rating), (self.published_date))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        type(self).all_books[self.id] = self
+
+    def update(self):
+        sql = """
+            UPDATE books
+            SET
+            title = ?,
+            author_id = ?,
+            total_pages = ?,
+            rating = ?,
+            published_date = ?
+        """
+        CURSOR.execute(sql, (self.title), (self.author_id),
+                       (self.total_pages), (self.rating), (self.published_date))
         CONN.commit()
