@@ -127,3 +127,11 @@ class Book:
         CURSOR.execute(sql, (self.title), (self.author_id),
                        (self.total_pages), (self.rating), (self.published_date))
         CONN.commit()
+
+    def delete(self):
+        sql = """
+            DELETE FROM books
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
