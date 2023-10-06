@@ -54,3 +54,5 @@ class Author:
         """
         CURSOR.execute(sql, (self.name),)
         CONN.commit()
+        self.id = CURSOR.lastrowid
+        type(self).all_authors[self.id] = self
