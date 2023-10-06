@@ -43,3 +43,16 @@ class Book:
             raise ValueError(
                 "The book's total page count must be an integer"
             )
+
+    @property
+    def rating(self):
+        return self._rating
+
+    @rating.setter
+    def rating(self, rating):
+        if isinstance(rating, int):
+            self._rating = rating
+        else:
+            raise ValueError(
+                "Book rating must be an integer"
+            )
