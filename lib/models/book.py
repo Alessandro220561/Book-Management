@@ -97,3 +97,14 @@ class Book:
         """
         CURSOR.execute(sql)
         CONN.commit()
+
+    def save(self):
+        sql = """
+            INSERT INTO books
+            (author_id, total_pages, rating, published_date)
+            VALUES
+            (?, ?, ?, ?)
+        """
+        CURSOR.execute(sql, (self.author_id), (self.total_pages),
+                       (self.rating), (self.published_date))
+        CONN.commit()
