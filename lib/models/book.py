@@ -71,3 +71,7 @@ class Book:
                 "Invalid date format, please use mm/dd/yyy format"
             )
         self._published_date = parsed_date.strftime(date_format)
+
+    @classmethod
+    def create_table(cls):
+        pass

@@ -26,7 +26,7 @@ class Author:
             )
 
     @classmethod
-    def create(self):
+    def create_table(self):
         sql = """
             CREATE TABLE IF NOT EXISTS authors
             (
