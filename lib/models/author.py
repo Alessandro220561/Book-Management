@@ -93,3 +93,11 @@ class Author:
             author.id = row[0]
             cls.all_authors[author.id] = author
         return author
+
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT * FROM authors
+        """
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
