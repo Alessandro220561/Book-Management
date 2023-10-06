@@ -44,3 +44,13 @@ class Author:
         """
         CURSOR.execute(sql)
         CONN.commit()
+
+    def save(self):
+        sql = """
+            INSERT INTO authors
+            (name)
+            VALUES
+            (?)
+        """
+        CURSOR.execute(sql, (self.name),)
+        CONN.commit()
