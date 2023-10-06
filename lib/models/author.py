@@ -83,3 +83,13 @@ class Author:
         author = cls(name)
         author.save()
         return author
+
+    def instance_from_db(cls, row):
+        author = cls.all_authors.get(row[0])
+        if author:
+            author.name = row[1]
+        else:
+            author = cls(row[1])
+            author.id = row[0]
+            cls.all_authors[author.id] = author
+        return author
