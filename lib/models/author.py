@@ -36,3 +36,11 @@ class Author:
         """
         CURSOR.execute(sql)
         CONN.commit
+
+    @classmethod
+    def drop_table(self):
+        sql = """
+            DROP TABLE IF EXISTS authors
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
