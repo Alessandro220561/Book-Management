@@ -73,5 +73,13 @@ class Author:
             DELETE FROM authors
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.id),)
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
+        del type(self).all_authors[self.id]
+        self.id = None
+
+    @classmethod
+    def create(cls, name):
+        author = cls(name)
+        author.save()
+        return author
