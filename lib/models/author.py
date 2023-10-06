@@ -24,3 +24,15 @@ class Author:
             raise ValueError(
                 "<<< Author's name must be a non-empty string >>>"
             )
+
+    @classmethod
+    def create(self):
+        sql = """
+            CREATE TABLE IF NOT EXISTS authors
+            (
+            id INTEGER PRIMARY KEY,
+            name TEXT
+            )
+        """
+        CURSOR.execute(sql)
+        CONN.commit
