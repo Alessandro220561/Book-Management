@@ -135,3 +135,12 @@ class Book:
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
+
+        del type(self).all_books[self.id]
+        self.id = None
+
+    @classmethod
+    def create(cls, title, author_id, total_pages, rating, published_date):
+        book = cls(title, author_id, total_pages, rating, published_date)
+        book.save()
+        return book
