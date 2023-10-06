@@ -30,3 +30,16 @@ class Book:
             raise ValueError(
                 "Book title must be a non-empty string"
             )
+
+    @property
+    def total_pages(self):
+        return self._total_pages
+
+    @total_pages.setter
+    def total_pages(self, total_pages):
+        if isinstance(total_pages, int):
+            self._total_pages = total_pages
+        else:
+            raise ValueError(
+                "The book's total page count must be an integer"
+            )
