@@ -144,3 +144,18 @@ class Book:
         book = cls(title, author_id, total_pages, rating, published_date)
         book.save()
         return book
+
+    @classmethod
+    def instance_from_db(cls, row):
+        book = cls.all_books.get(row[0])
+        if book:
+            book.title = row[1]
+            book.author_id = row[2]
+            book.total_pages = int(row[3])
+            book.rating = int(row[4])
+            book.published_date = row[5]
+        else:
+            book = cls(row[1], row[2], row[3], row[4], row[5])
+            book.id = row[0]
+            cls.all_books[book.id] = book
+        return book
