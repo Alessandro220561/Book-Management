@@ -56,3 +56,14 @@ class Author:
         CONN.commit()
         self.id = CURSOR.lastrowid
         type(self).all_authors[self.id] = self
+
+    def update(self):
+        sql = """
+            UPDATE authors
+            SET 
+            name = ?
+            WHERE
+            id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.id))
+        CONN.commit()
