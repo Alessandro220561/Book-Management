@@ -1,4 +1,6 @@
 from models.__init__ import CURSOR, CONN
+from models.author import Author
+import datetime
 
 
 class Book:
@@ -74,4 +76,16 @@ class Book:
 
     @classmethod
     def create_table(cls):
-        pass
+        sql = """
+            CREATE TABLE IF NOT EXISTS books
+            (
+            id INTEGER PRIMARY KEY,
+            author_id INT,
+            FOREIGN KEY (author_id) REFERENCES authors(id),
+            total_pages INT,
+            rating INT,
+            published_date TEXT
+            )
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
