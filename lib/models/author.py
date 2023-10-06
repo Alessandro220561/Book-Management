@@ -110,3 +110,13 @@ class Author:
         """
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_name(cls, name):
+        sql = """
+            SELECT * FROM authors
+            WHERE name = ?
+        """
+
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
