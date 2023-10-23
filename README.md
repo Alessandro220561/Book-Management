@@ -38,6 +38,8 @@ To get started with the application, follow these installation steps:
    git clone git@github.com:Alessandro220561/library-management.git
    ```
 
+2. Navigate to the project directory.
+
    ```bash
    cd library-management
    ```
