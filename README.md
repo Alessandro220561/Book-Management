@@ -37,3 +37,19 @@ To get started with the application, follow these installation steps:
    ```bash
    git clone git@github.com:Alessandro220561/library-management.git
    ```
+
+   ```bash
+   cd library-management
+   ```
+
+   ## Usage
+
+   To use the Python CLI Library Management System, follow these steps:
+
+   1. Run the main menu by using the following command:
+
+   ```bash
+   python lib/cli.py
+   ```
+
+   2. Follow the on-screen instructions to navigate and interact with the application.
