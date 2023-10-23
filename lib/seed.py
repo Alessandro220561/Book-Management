@@ -1,13 +1,9 @@
-#!/usr/bin/env python3
-# lib/debug.py
-
 from models.__init__ import CONN, CURSOR
 from models.author import Author
 from models.book import Book
-import ipdb
 
 
-def reset_database():
+def seed_database():
     Book.drop_table()
     Author.drop_table()
     Book.create_table()
@@ -17,4 +13,5 @@ def reset_database():
     Book.create("IT", 698, 8, "12/13/1991", stephen_king.id)
 
 
-ipdb.set_trace()
+seed_database()
+print("Seeded database")

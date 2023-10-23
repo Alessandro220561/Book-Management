@@ -7,17 +7,17 @@ class Book:
 
     all_books = {}
 
-    def __init__(self, title, author_id, total_pages, rating, published_date, id=None):
+    def __init__(self, title, pages, rating, published_date, author_id, id=None):
         self.title = title
         self.author_id = author_id
-        self.total_pages = total_pages
+        self.pages = pages
         self.rating = rating
         self.published_date = published_date
         self.id = id
 
     def __repr__(self):
         return (
-            f"<<<Book {self.id}: {self.title}, {self.total_pages}, {self.rating}, {self.published_date}, " +
+            f"<<<Book {self.id}: {self.title}, {self.pages}, {self.rating}, {self.published_date}, " +
             f"Author ID: {self.author_id} >>>"
         )
 
@@ -35,16 +35,16 @@ class Book:
             )
 
     @property
-    def total_pages(self):
-        return self._total_pages
+    def pages(self):
+        return self._pages
 
-    @total_pages.setter
-    def total_pages(self, total_pages):
-        if isinstance(total_pages, int):
-            self._total_pages = total_pages
+    @pages.setter
+    def pages(self, pages):
+        if isinstance(pages, int):
+            self._pages = pages
         else:
             raise ValueError(
-                "The book's total page count must be an integer"
+                "The book's page count must be an integer"
             )
 
     @property
@@ -82,11 +82,11 @@ class Book:
             (
             id INTEGER PRIMARY KEY,
             title TEXT,
-            author_id INT,
-            FOREIGN KEY (author_id) REFERENCES authors(id),
-            total_pages INT,
+            pages INT,
             rating INT,
-            published_date TEXT
+            published_date TEXT,
+            author_id INT,
+            FOREIGN KEY (author_id) REFERENCES authors(id)
             )
         """
         CURSOR.execute(sql)
@@ -103,12 +103,12 @@ class Book:
     def save(self):
         sql = """
             INSERT INTO books
-            (title, author_id, total_pages, rating, published_date)
+            (title, author_id, pages, rating, published_date)
             VALUES
             (?, ?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.title), (self.author_id), (self.total_pages),
-                       (self.rating), (self.published_date))
+        CURSOR.execute(sql, (self.title, self.author_id, self.pages,
+                       self.rating, self.published_date))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -120,12 +120,14 @@ class Book:
             SET
             title = ?,
             author_id = ?,
-            total_pages = ?,
+            pages = ?,
             rating = ?,
             published_date = ?
+            WHERE
+            id = ?
         """
-        CURSOR.execute(sql, (self.title), (self.author_id),
-                       (self.total_pages), (self.rating), (self.published_date))
+        CURSOR.execute(sql, (self.title, self.author_id,
+                       self.pages, self.rating, self.published_date, self.id))
         CONN.commit()
 
     def delete(self):
@@ -140,8 +142,8 @@ class Book:
         self.id = None
 
     @classmethod
-    def create(cls, title, author_id, total_pages, rating, published_date):
-        book = cls(title, author_id, total_pages, rating, published_date)
+    def create(cls, title, pages, rating, published_date, author_id):
+        book = cls(title, pages, rating, published_date, author_id)
         book.save()
         return book
 
@@ -150,10 +152,10 @@ class Book:
         book = cls.all_books.get(row[0])
         if book:
             book.title = row[1]
-            book.author_id = row[2]
-            book.total_pages = int(row[3])
-            book.rating = int(row[4])
-            book.published_date = row[5]
+            book.pages = int(row[2])
+            book.rating = int(row[3])
+            book.published_date = row[4]
+            book.author_id = row[5]
         else:
             book = cls(row[1], row[2], row[3], row[4], row[5])
             book.id = row[0]
@@ -169,10 +171,10 @@ class Book:
         return [cls.instance_from_db(row) for row in rows]
 
     @classmethod
-    def find_by_id(cls, id):
+    def get_books_by_author(cls, author_id):
         sql = """
             SELECT * FROM books
-            WHERE id = ?
+            WHERE author_id = ?
         """
-        row = CURSOR.execute(sql).fetchone()
-        return cls.instance_from_db(row) if row else None
+        rows = CURSOR.execute(sql, (author_id,)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]

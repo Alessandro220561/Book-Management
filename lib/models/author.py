@@ -4,13 +4,15 @@ from models.__init__ import CURSOR, CONN
 class Author:
 
     all_authors = {}
+    author_count = 0
 
-    def __init__(self, name, id):
+    def __init__(self, name, id=None):
         self.name = name
         self.id = id
+        Author.author_count += 1
 
     def __repr__(self):
-        return f"<<<Author {self.id}: {self.name}>>>"
+        return f"{self.name}"
 
     @property
     def name(self):
@@ -52,7 +54,7 @@ class Author:
             VALUES
             (?)
         """
-        CURSOR.execute(sql, (self.name),)
+        CURSOR.execute(sql, (self.name,))
         CONN.commit()
         self.id = CURSOR.lastrowid
         type(self).all_authors[self.id] = self
@@ -84,6 +86,7 @@ class Author:
         author.save()
         return author
 
+    @classmethod
     def instance_from_db(cls, row):
         author = cls.all_authors.get(row[0])
         if author:
@@ -108,15 +111,6 @@ class Author:
             SELECT * FROM authors
             WHERE id = ?
         """
+
         row = CURSOR.execute(sql, (id,)).fetchone()
-        return cls.instance_from_db(row) if row else None
-
-    @classmethod
-    def find_by_name(cls, name):
-        sql = """
-            SELECT * FROM authors
-            WHERE name = ?
-        """
-
-        row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
